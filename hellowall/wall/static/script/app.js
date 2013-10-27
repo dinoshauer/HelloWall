@@ -1,5 +1,6 @@
 var utils = {
 	messages: [],
+	loader: $('<div class="loader"><i class="fa fa-2x fa-refresh fa-spin"></i></div>'),
 	error: function(message){
 		return '<div class="error hide"><p>Oh no, an error occured!<br />' + message + '</p></div>';
 	},
@@ -15,16 +16,18 @@ var utils = {
 			url: endpoint,
 			async: async,
 			beforeSend: function(){
-				// this is where we append a loading image
+				$('body').append(utils.loader.fadeToggle('slow'));
 			},
 			success: utils.process,
 			error: function(jqXHR, textStatus, errorThrown){
+				utils.loader.fadeToggle('slow');
 				var error = $(utils.error(jqXHR.responseJSON.error));
 				$('body').prepend(error.fadeIn('slow'));
 			}
 		});
 	},
 	process: function(data){
+		utils.loader.fadeToggle('slow');
 		if(!data.result){
 			var warning = $(utils.warning('There are no messages!'));
 			$('body').prepend(warning.fadeIn('slow'));
@@ -62,6 +65,10 @@ var utils = {
 		return utils.colors[Math.floor((Math.random()*utils.colors.length))]
 	},
 	resize: function(){
+		// Random sizing perhaps:
+		// (Math.random() * ($(document).width() - ((Math.random()*100) + 50).toFixed())).toFixed();
+		// var posx = (Math.random() * ($(document).width() - ((Math.random()*100) + 50).toFixed())).toFixed();
+		// var posy = (Math.random() * ($(document).height() - ((Math.random()*100) + 50).toFixed())).toFixed();
 		return null
 	},
 	place: function(){
