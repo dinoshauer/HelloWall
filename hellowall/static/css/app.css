@@ -1,0 +1,57 @@
+/* Globals */
+body, html {
+	margin:0;
+	padding:0;
+	font-family:arial;
+}
+
+/* Recyclables */
+.message {
+	margin:15px;
+}
+	.message p {
+		padding:5px;
+	}
+.hide {
+	display:none;
+}
+.error, .warning {
+	position:fixed;
+	top:0;
+	width:100%;
+}
+	.error p, .warning p {
+		margin:0;
+		padding:5px;
+		text-align:center;
+	}
+	.error:hover p {
+		background-color:rgb(252, 159, 159);
+	}
+	.error p {
+		background-color:rgb(255, 199, 199);
+	}
+	.warning:hover p {
+		background-color:rgb(253, 207, 147);
+	}
+	.warning p {
+		background-color:rgb(255, 224, 184);
+	}
+
+/* One timers */
+#initial {
+	width:100%;
+	height:100%;
+	text-align:center;
+	display:table;
+}
+	#initial h1 {
+		font-weight:100;
+		font-size:100px;
+		line-height:80px;
+		vertical-align:middle;
+		display:table-cell;
+	}
+		#initial h1 span {
+			font-weight:800;
+		}
