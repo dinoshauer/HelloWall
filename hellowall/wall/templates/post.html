@@ -1,7 +1,36 @@
 {% extends 'layout.html' %}
 {% set title = 'New post &middot; ' %}
+{% block css %}
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+{% endblock %}
 {% block body %}
-	post.html
+	<div id="post-controls">
+		<h1>New <span>Post</span></h1>
+		<form>
+			<div class="form-group">
+				<textarea class="form-control" rows="10"></textarea>
+			</div>
+			<a href="#" id="post" class="btn btn-primary pull-right">Submit post</a>
+		</form>
+	</div>
 {% endblock %}
 {% block scripts %}
+	<script src="{{ url_for('wall.static', filename='script/post.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#post').click(function(event){
+				event.preventDefault();
+				var message = $('textarea').val();
+				if(message != ''){
+					$(this).attr('disabled', 'disabled');
+					utils.post(message);
+				}
+				else{
+					$(this).removeClass('btn-primary').addClass('btn-warning');
+					$('.form-group').addClass('has-error');
+					$('body').append($(utils.warning('You haven\'t written any message yet!')).fadeIn());
+				}
+			});
+		});
+	</script>
 {% endblock %}

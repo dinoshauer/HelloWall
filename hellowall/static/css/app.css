@@ -2,14 +2,34 @@
 body, html {
 	margin:0;
 	padding:0;
-	font-family:arial;
+	font-family: 'Lato', sans-serif;
 	overflow:hidden;
+}
+h1 {
+	font-weight:100;
+	font-size:100px;
+	line-height:80px;
+	vertical-align:middle;
+	display:table-cell;
+}
+	h1 span {
+		font-weight:800;
+	}
+textarea {
+    resize: none;
+    margin-top:10px;
+    margin-bottom:5px;
 }
 #message-container {
 	width:100%;
 	height:100%;
 	margin-left:50px;
 }
+#post-controls {
+	margin:0 auto;
+	width:50%;
+	padding-top:70px;
+}	
 
 /* Recyclables */
 .loader {
@@ -27,18 +47,18 @@ body, html {
 }
 	.message p {
 		padding:5px;
-		font-weight:bolder;
+		font-weight:400;
 		font-size:100%;
 	}
 .hide {
 	display:none;
 }
-.error, .warning {
+.error, .warning, .success {
 	position:fixed;
 	top:0;
 	width:100%;
 }
-	.error p, .warning p {
+	.error p, .warning p, .success p {
 		margin:0;
 		padding:5px;
 		text-align:center;
@@ -55,6 +75,12 @@ body, html {
 	.warning p {
 		background-color:rgb(255, 224, 184);
 	}
+	.success:hover p {
+		background-color:rgb(143, 226, 127);
+	}
+	.success p {
+		background-color:rgb(195, 255, 184);
+	}
 
 /* One timers */
 #initial {
@@ -63,13 +89,3 @@ body, html {
 	text-align:center;
 	display:table;
 }
-	#initial h1 {
-		font-weight:100;
-		font-size:100px;
-		line-height:80px;
-		vertical-align:middle;
-		display:table-cell;
-	}
-		#initial h1 span {
-			font-weight:800;
-		}

@@ -1,7 +1,10 @@
 <html>
 	<head>
 		<title>{{ title|safe }}Hello Wall!</title>
+		{% block css %}
+		{% endblock %}
 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Lato:100,400,900italic' rel='stylesheet' type='text/css'>
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 	</head>
 	<body>
@@ -12,7 +15,6 @@
 		{% endblock %}
 		<script src="{{ url_for('static', filename='script/jquery.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='script/masonry.pkgd.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='script/jquery.splatter.js') }}"></script>
 		{% block scripts %}
 			{#
 				Page scripts go here
