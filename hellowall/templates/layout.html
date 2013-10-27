@@ -11,7 +11,8 @@
 			#}
 		{% endblock %}
 		<script src="{{ url_for('static', filename='script/jquery.min.js') }}"></script>
-		{# <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> #}
+		<script src="{{ url_for('static', filename='script/masonry.pkgd.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='script/jquery.splatter.js') }}"></script>
 		{% block scripts %}
 			{#
 				Page scripts go here

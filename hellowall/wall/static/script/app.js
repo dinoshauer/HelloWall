@@ -1,4 +1,9 @@
 var utils = {
+	msnry: new Masonry( document.getElementById('message-container'), {
+		// options
+		columnWidth: 150,
+		itemSelector: '.message'
+	}),
 	messages: [],
 	loader: $('<div class="loader"><i class="fa fa-2x fa-refresh fa-spin"></i></div>'),
 	error: function(message){
@@ -8,7 +13,7 @@ var utils = {
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
 	message: function(message){
-		return '<div class="message" data-timeout="' + message[1] + '"><p>' + message[0] + '</p></div>'
+		return '<div class="message"><p>' + message + '</p></div>'
 	},
 	call: function(endpoint, type, async, loader, error){
 		$.ajax({
@@ -20,59 +25,84 @@ var utils = {
 			},
 			success: utils.process,
 			error: function(jqXHR, textStatus, errorThrown){
-				utils.loader.fadeToggle('slow');
+				utils.loader.fadeIn('slow');
 				var error = $(utils.error(jqXHR.responseJSON.error));
 				$('body').prepend(error.fadeIn('slow'));
 			}
 		});
 	},
 	process: function(data){
-		utils.loader.fadeToggle('slow');
-		if(!data.result){
-			var warning = $(utils.warning('There are no messages!'));
-			$('body').prepend(warning.fadeIn('slow'));
-		}
-		else {
-			var initial = $('#initial');
-			if(initial.is(':visible')){
-				initial.fadeOut('slow', function(){
-					this.remove();
-					$.each(data.data, function(i, item){
-						var msg = $(utils.message(item)).css('color', utils.colorize());
-						$('body').append(msg); // TODO: Place, colorsize etc instead of just html()
-					});
-				});
+		utils.loader.fadeOut('slow', function(){
+			this.remove()
+			if(!data.result){
+				var warning = $(utils.warning('There are no messages to display!'));
+				$('body').prepend(warning.fadeIn('slow'));
 			}
 			else {
-				$('body').append(data.data); // TODO: Place, colorsize etc instead of just html()
+				if($('.warning').is(':visible')){
+					$('.warning').fadeOut('fast');
+				}
+				if($('.error').is(':visible')){
+					$('.error').fadeOut('fast');
+				}
+				var initial = $('#initial');
+				if(initial.is(':visible')){
+					initial.fadeOut('slow', function(){
+						this.remove();
+						$.each(data.data, function(i, item){
+							var msg = $(utils.message(item)).css('color', utils.colorize());
+							$('#message-container').append(msg);
+							utils.msnry.appended(msg);
+						});
+						utils.messages = data.data;
+					});
+				}
+				else {
+					var newDiff = $(data.data).not(utils.messages).get();
+					$.each(newDiff, function(i, item){
+						var msg = $(utils.message(item)).css('color', utils.colorize());
+						$('#message-container').append(msg);
+						utils.msnry.appended(msg);
+						utils.messages.push(item);
+					});
+					// Delete old messages
+					var oldDiff = $(utils.messages).not(data.data).get();
+					if(oldDiff.length > 0){
+						$.each(oldDiff, function(i, item){
+							var msg = $($('.message:contains("' + item + '")'));
+							msg.remove();
+							utils.msnry.remove(msg);
+							utils.msnry.layout();
+						});
+					}
+				}
 			}
-		}
+		});
 	},
-	initial: function(){
-		return null
-	},
-	update: function(){
+	initial: function(interval){
 		utils.call('/api/read', 'GET', false, $('#loader'), $('#error'));
+		setInterval(function(){
+			utils.call('/api/read', 'GET', false, $('#loader'), $('#error'));
+		}, interval);
 		return null
 	},
 	colors: [
-		'red',
-		'blue',
-		'yellow',
-		'green',
+		'#fbbf2f',
+		'#ee7338',
+		'#21c7da',
+		'#00aa8b',
+		'#0d66a6',
+		'#365f9d'
 	],
 	colorize: function(){
 		return utils.colors[Math.floor((Math.random()*utils.colors.length))]
 	},
 	resize: function(){
-		// Random sizing perhaps:
-		// (Math.random() * ($(document).width() - ((Math.random()*100) + 50).toFixed())).toFixed();
-		// var posx = (Math.random() * ($(document).width() - ((Math.random()*100) + 50).toFixed())).toFixed();
-		// var posy = (Math.random() * ($(document).height() - ((Math.random()*100) + 50).toFixed())).toFixed();
-		return null
-	},
-	place: function(){
-		return null
+		var msgs = $('.message');
+		$.each(msgs, function(i, item){
+			var timeLeft = $(item).data('timeout');
+			$(item).css('font-size', (timeLeft/100*10).toFixed() + 'px');
+		});
 	},
 	remove: function(that){
 		$(that).fadeOut(function(){

@@ -7,7 +7,7 @@ __REDIS_HOST__ = 'localhost'
 __REDIS_PORT__ = 6379
 
 class WallMessage:
-	def __init__(self, prefix='msg', timeout=timedelta(minutes=5)):
+	def __init__(self, prefix='msg', timeout=timedelta(minutes=60)):
 		self.prefix = prefix
 		self.timeout = timeout
 		self.r = StrictRedis(__REDIS_HOST__, port=__REDIS_PORT__)
@@ -21,7 +21,9 @@ class WallMessage:
 			keys = self.r.keys(self.prefix + '*')
 			result = list()
 			for key in keys:
-				result.append((self.r.get(key), self.r.ttl(key)))
+				value = self.r.get(key)
+				if value not in result:
+					result.append(value)
 			return {'result': True if len(result) > 0 else False, 'data': result}, 200
 		except ConnectionError, e:
 			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503

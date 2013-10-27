@@ -1,17 +1,19 @@
 {% extends 'layout.html' %}
 {% set title = '' %}
 {% block body %}
-	<div id="initial" class="hide" function="test();">
+	<div id="initial" class="hide">
 		<h1>Hello <span>Wall</span></h1>
+	</div>
+	<div id="message-container">
 	</div>
 {% endblock %}
 {% block scripts %}
 	<script src="{{ url_for('wall.static', filename='script/app.js') }}"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#initial').hide();  // TODO: Why the hell do I have to hide it first now?! It worked 10 minutes ago!!
+			$('#initial').hide();  // TODO: Have to hide first because #initial has display:table;
 			$('#initial').fadeIn(3000, function(){
-				utils.update();
+				utils.initial(30000);
 			});
 		});
 	</script>
