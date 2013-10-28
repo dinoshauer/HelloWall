@@ -13,8 +13,13 @@ class WallMessage:
 		self.r = StrictRedis(__REDIS_HOST__, port=__REDIS_PORT__)
 
 	def post(self, message):
-		key = '%(prefix)s:%(hash)s' % {'prefix': self.prefix, 'hash': uuid()}
-		return self.r.setex(key, self.timeout, message)
+		try:
+			key = '%(prefix)s:%(hash)s' % {'prefix': self.prefix, 'hash': uuid()}
+			return {'result': True, 'message': self.r.setex(key, self.timeout, message)}, 200
+		except ConnectionError, e:
+			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503
+		except Exception, e:
+			return {'result': False, 'error': str(e)}, 500
 
 	def read(self):
 		try:

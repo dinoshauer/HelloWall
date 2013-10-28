@@ -7,11 +7,11 @@ api = Blueprint('api', __name__, url_prefix='/api')
 def post():
 	message = request.form['message']
 	if message is not None:
-		msg = WallMessage()
-		if msg.post(message):
+		msg = WallMessage().post(message)
+		if msg[0]['result']:
 			return jsonify({'result': 'Message posted.', 'message': message}), 200
 		else:
-			return jsonify({'result': 'An unknown error occurred.'}), 500
+			return jsonify(msg[0]), msg[1]
 	else:
 		return jsonify({'error': 'Missing message parameter'}), 400
 
