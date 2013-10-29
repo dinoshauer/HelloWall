@@ -48,7 +48,7 @@ var utils = {
 				var initial = $('#initial');
 				if(initial.is(':visible')){
 					initial.fadeOut('slow', function(){
-						this.remove();
+						$(this).remove();
 						$.each(data.data, function(i, item){
 							var msg = $(utils.message(item.replace(/\n/g, '<br />'))).css('color', utils.colorize());
 							$('#message-container').append(msg);
