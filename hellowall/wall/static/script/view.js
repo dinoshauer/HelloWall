@@ -33,7 +33,7 @@ var utils = {
 	},
 	process: function(data){
 		utils.loader.fadeOut('slow', function(){
-			this.remove()
+			$(this).remove()
 			if(!data.result){
 				var warning = $(utils.warning('There are no messages to display!'));
 				$('body').prepend(warning.fadeIn('slow'));
