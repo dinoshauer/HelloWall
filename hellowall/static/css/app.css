@@ -42,13 +42,19 @@ textarea {
 	margin:15px;
 	width:250px;
 	/*width:5%;*/
-	display:block;
+	/*display:block;*/
 }
 	.message p {
 		padding:5px;
 		font-weight:400;
 		font-size:60px;
 	}
+.w2 {
+	width:400px;
+}
+.w8 {
+	width:1138px;
+}
 .hide {
 	display:none;
 }

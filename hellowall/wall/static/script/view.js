@@ -2,7 +2,8 @@ var utils = {
 	msnry: new Masonry( document.getElementById('message-container'), {
 		// options
 		columnWidth: 150,
-		itemSelector: '.message'
+		itemSelector: '.message',
+		containerStyle: null
 	}),
 	messages: [],
 	loader: $('<div class="loader"><i class="fa fa-2x fa-refresh fa-spin"></i></div>'),
@@ -13,6 +14,12 @@ var utils = {
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
 	message: function(message){
+		if(message.length > 50){
+			return '<div class="message w8"><p>' + message + '</p></div>'	
+		}
+		else if(message.length > 20 && message.length < 49){
+			return '<div class="message w8"><p>' + message + '</p></div>'
+		}
 		return '<div class="message"><p>' + message + '</p></div>'
 	},
 	call: function(endpoint, type, async){
