@@ -2,9 +2,16 @@ from datetime import timedelta
 from uuid import uuid4 as uuid
 from redis import StrictRedis
 from redis.exceptions import ConnectionError
+import bleach
 
 __REDIS_HOST__ = 'localhost'
 __REDIS_PORT__ = 6379
+
+class WallException(Exception):
+	def __init__(self, value):
+		self.value = value
+	def __str__(self):
+		return repr(self.value)
 
 class WallMessage:
 	def __init__(self, prefix='msg', timeout=timedelta(minutes=60)):
@@ -15,7 +22,7 @@ class WallMessage:
 	def post(self, message):
 		try:
 			key = '%(prefix)s:%(hash)s' % {'prefix': self.prefix, 'hash': uuid()}
-			return {'result': True, 'message': self.r.setex(key, self.timeout, message)}, 200
+			return {'result': True, 'message': self.r.setex(key, self.timeout, bleach.clean(message))}, 200
 		except ConnectionError, e:
 			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503
 		except Exception, e:
