@@ -7,7 +7,7 @@ body, html {
 }
 h1 {
 	font-weight:100;
-	font-size:300px;
+	font-size:100px;
 	line-height:80px;
 	vertical-align:middle;
 	display:table-cell;
@@ -29,9 +29,6 @@ textarea {
 	margin:0 auto;
 	width:50%;
 	padding-top:70px;
-}
-#post-controls h1 {
-	font-size:100px;
 }
 /* Recyclables */
 .loader {

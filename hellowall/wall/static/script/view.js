@@ -87,7 +87,7 @@ var utils = {
 		return null
 	},
 	colors: [
-		'#fbbf2f',
+		//'#fbbf2f',
 		'#ee7338',
 		'#21c7da',
 		'#00aa8b',
