@@ -52,3 +52,7 @@ $('body').on('click', '.error', function(){
 $('body').on('click', '.warning', function(){
 	utils.remove(this);
 });
+// Remove the success box
+$('body').on('click', '.success', function(){
+	utils.remove(this);
+});

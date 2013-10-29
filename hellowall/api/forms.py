@@ -41,3 +41,23 @@ class WallMessage:
 			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503
 		except Exception, e:
 			return {'result': False, 'error': str(e)}, 500
+
+	def sticky(self, key):
+		try:
+			result = self.r.persist(key)
+			if result > 0:
+				return {'result': True, 'message': 'Post stickied.'}, 200
+			else:
+				return {'result': False, 'error': 'Key not found or key does not have a timeout.'}, 404
+		except Exception, e:
+			return {'result': False, 'error': str(e)}, 500
+
+	def delete(self, key):
+		try:
+			result = self.r.delete(key)
+			if result > 0:
+				return {'result': True, 'message': 'Post deleted.'}, 200
+			else:
+				return {'result': False, 'error': 'No posts found.'}, 404
+		except Exception, e:
+			return {'result': False, 'error': str(e)}, 500

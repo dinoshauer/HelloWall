@@ -18,12 +18,23 @@
 	<script src="{{ url_for('wall.static', filename='script/wall/post.js') }}"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
+			var checkForBanner = 0;
 			$('#post').click(function(event){
 				event.preventDefault();
 				var message = $('textarea').val();
 				if(message != ''){
 					$(this).attr('disabled', 'disabled');
 					utils.post(message);
+					checkForBanner = setInterval(function(){
+						if($('.success').is(':visible')){
+							setTimeout(function(){
+								$('.success').fadeOut('slow', function(){
+									$(this).remove();
+									checkForBanner = 0;
+								});
+							}, 5000);
+						};
+					}, 15000);
 				}
 				else{
 					$(this).removeClass('btn-primary').addClass('btn-warning');

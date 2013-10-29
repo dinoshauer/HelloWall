@@ -6,7 +6,7 @@ admin = Blueprint('admin', __name__,
 				template_folder='templates',
 				static_folder='static')
 
-@admin.route('/list', methods=['GET'])
+@admin.route('/', methods=['GET'])
 def view():
 	try:
 		return render_template('admin/view.html')

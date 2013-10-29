@@ -7,7 +7,10 @@ var utils = {
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
 	message: function(message){
-		return '<li class="message">' + message[0] + '<a href="#" class="sticky" data-key-id="' + message[1] + '">Make this message a sticky</a></li>'
+		if(message[1] === null){
+			return '<li>' + message[0] + '</li>'
+		}
+		return '<li>' + message[0] + ' &middot; <a href="#" class="sticky" data-key-id="' + message[1] + '">Make this message a sticky</a> or <a href="#" class="delete" data-key-id="' + message[1] + '">delete it</a></li>'
 	},
 	call: function(endpoint, type, async){
 		$.ajax({
@@ -19,19 +22,25 @@ var utils = {
 			},
 			success: utils.process,
 			error: function(jqXHR, textStatus, errorThrown){
-				utils.loader.fadeIn('slow');
-				var error = $(utils.error(jqXHR.responseJSON.error));
-				$('body').prepend(error.fadeIn('slow'));
+				utils.loader.fadeIn('slow', function(){
+					var error = $(utils.error(jqXHR.responseJSON.error));
+					if(!$('.error').is(':visible')){
+						$('body').prepend(error.fadeIn('slow'));
+					}
+				});
+				utils.loader.fadeOut('slow');
 			}
 		});
 	},
 	process: function(data){
-		console.log(data);
 		utils.loader.fadeOut('slow', function(){
 			$(this).remove()
 			if(!data.result){
-				var warning = $(utils.warning('There are no messages to display!'));
-				$('body').prepend(warning.fadeIn('slow'));
+				if(!$('.warning').is(':visible')){
+					var warning = $(utils.warning('There are no messages to display!'));
+					$('body').prepend(warning.fadeIn('slow'));
+				}
+				$('ul').html(utils.message(['No posts found.', null]));
 			}
 			else {
 				if($('.warning').is(':visible')){
@@ -40,28 +49,13 @@ var utils = {
 				if($('.error').is(':visible')){
 					$('.error').fadeOut('fast');
 				}
-				$.each(data.data, function(i, item){
-					$('ul').append(utils.message(item));
-				});
-				// else {
-				// 	var newDiff = $(data.data).not(utils.messages).get();
-				// 	$.each(newDiff, function(i, item){
-				// 		var msg = $(utils.message(item)).css('color', utils.colorize());
-				// 		$('#message-container').append(msg);
-				// 		utils.msnry.appended(msg);
-				// 		utils.messages.push(item);
-				// 	});
-				// 	// Delete old messages
-				// 	var oldDiff = $(utils.messages).not(data.data).get();
-				// 	if(oldDiff.length > 0){
-				// 		$.each(oldDiff, function(i, item){
-				// 			var msg = $($('.message:contains("' + item + '")'));
-				// 			msg.remove();
-				// 			utils.msnry.remove(msg);
-				// 			utils.msnry.layout();
-				// 		});
-				// 	}
-				// }
+				$('ul').fadeOut('slow', function(){
+					$(this).empty();
+					$.each(data.data, function(i, item){
+						$('ul').append(utils.message(item));
+					});
+				})
+				$('ul').fadeIn('slow');
 			}
 		});
 	},

@@ -25,10 +25,13 @@ textarea {
 	height:100%;
 	margin-left:50px;
 }
-#post-controls {
+#post-controls, #post-list {
 	margin:0 auto;
 	width:50%;
 	padding-top:70px;
+}
+#post-list ul {
+	margin-top:30px;
 }
 /* Recyclables */
 .loader {
@@ -67,7 +70,7 @@ textarea {
 		margin:0;
 		padding:5px;
 		text-align:center;
-		font-size:50px;
+		font-size:20px;
 	}
 	.error:hover p {
 		background-color:rgb(252, 159, 159);

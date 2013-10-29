@@ -15,6 +15,9 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			utils.initial();
+			setInterval(function(){
+				utils.initial();
+			}, 30000);
 		});
 	</script>
 {% endblock %}

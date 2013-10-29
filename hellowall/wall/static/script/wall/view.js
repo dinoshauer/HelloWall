@@ -22,6 +22,24 @@ var utils = {
 		}
 		return '<div class="message"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'
 	},
+	colors: [
+		//'#fbbf2f',
+		'#ee7338',
+		'#21c7da',
+		'#00aa8b',
+		'#0d66a6',
+		'#365f9d'
+	],
+	i: 0,
+	waiting: function(){
+		$('body').animate({
+			backgroundColor: utils.colors[utils.i]
+		}, 30000);
+		++utils.i;
+		if(utils.i > utils.colors.length){
+			utils.i = 0;
+		}
+	},
 	call: function(endpoint, type, async){
 		$.ajax({
 			type: type,
@@ -32,9 +50,17 @@ var utils = {
 			},
 			success: utils.process,
 			error: function(jqXHR, textStatus, errorThrown){
-				utils.loader.fadeIn('slow');
-				var error = $(utils.error(jqXHR.responseJSON.error));
-				$('body').prepend(error.fadeIn('slow'));
+				utils.loader.fadeIn('slow', function(){
+					var error = $(utils.error(jqXHR.responseJSON.error));
+					if(!$('.error').is(':visible')){
+						$('body').prepend(error.fadeIn('slow'));
+						utils.waiting();
+					}
+					if(!$('#initial').is(':visible')){
+						$('#initial').fadeIn('slow');
+					}
+				});
+				utils.loader.fadeOut('slow');
 			}
 		});
 	},
@@ -42,10 +68,21 @@ var utils = {
 		utils.loader.fadeOut('slow', function(){
 			$(this).remove()
 			if(!data.result){
-				var warning = $(utils.warning('There are no messages to display!'));
-				$('body').prepend(warning.fadeIn('slow'));
+				if(!$('.warning').is(':visible')){
+					var warning = $(utils.warning('There are no messages to display!'));
+					$('body').prepend(warning.fadeIn('slow'));
+					$('.message').fadeOut('slow', function(){
+						if(!$('#initial').is(':visible')){
+							$('#initial').fadeIn('slow');
+						}
+					});
+				}
+				utils.waiting();
 			}
 			else {
+				$('body').animate({
+					backgroundColor: '#FFF'
+				}, 5000);
 				if($('.warning').is(':visible')){
 					$('.warning').fadeOut('fast');
 				}
@@ -55,7 +92,6 @@ var utils = {
 				var initial = $('#initial');
 				if(initial.is(':visible')){
 					initial.fadeOut('slow', function(){
-						$(this).remove();
 						$.each(data.data, function(i, item){
 							var msg = $(utils.message(item)).css('color', utils.colorize());
 							$('#message-container').append(msg);
@@ -93,14 +129,6 @@ var utils = {
 		}, interval);
 		return null
 	},
-	colors: [
-		//'#fbbf2f',
-		'#ee7338',
-		'#21c7da',
-		'#00aa8b',
-		'#0d66a6',
-		'#365f9d'
-	],
 	colorize: function(){
 		return utils.colors[Math.floor((Math.random()*utils.colors.length))]
 	},
