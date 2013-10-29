@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% set title = 'Administration &middot; ' %}
+{% block css %}
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+	<div id="post-list">
+		<h1>Listing <span>Posts</span></h1>
+		<ul>
+		</ul>
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script src="{{ url_for('admin.static', filename='script/admin/view.js') }}"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			utils.initial();
+		});
+	</script>
+{% endblock %}

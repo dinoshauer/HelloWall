@@ -14,13 +14,13 @@ var utils = {
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
 	message: function(message){
-		if(message.length > 50){
-			return '<div class="message w8"><p>' + message + '</p></div>'	
+		if(message[0].length > 50){
+			return '<div class="message w8"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'	
 		}
-		else if(message.length > 20 && message.length < 49){
-			return '<div class="message w8"><p>' + message + '</p></div>'
+		else if(message[0].length > 20 && message[0].length < 49){
+			return '<div class="message w8"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'
 		}
-		return '<div class="message"><p>' + message + '</p></div>'
+		return '<div class="message"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'
 	},
 	call: function(endpoint, type, async){
 		$.ajax({
@@ -57,7 +57,7 @@ var utils = {
 					initial.fadeOut('slow', function(){
 						$(this).remove();
 						$.each(data.data, function(i, item){
-							var msg = $(utils.message(item.replace(/\n/g, '<br />'))).css('color', utils.colorize());
+							var msg = $(utils.message(item)).css('color', utils.colorize());
 							$('#message-container').append(msg);
 							utils.msnry.appended(msg);
 						});

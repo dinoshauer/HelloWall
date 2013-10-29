@@ -14,7 +14,7 @@ class WallException(Exception):
 		return repr(self.value)
 
 class WallMessage:
-	def __init__(self, prefix='msg', timeout=timedelta(minutes=60)):
+	def __init__(self, prefix='msg', timeout=timedelta(minutes=1)):
 		self.prefix = prefix
 		self.timeout = timeout
 		self.r = StrictRedis(__REDIS_HOST__, port=__REDIS_PORT__)
@@ -35,7 +35,7 @@ class WallMessage:
 			for key in keys:
 				value = self.r.get(key)
 				if value not in result:
-					result.append(value)
+					result.append((value, key))
 			return {'result': True if len(result) > 0 else False, 'data': result}, 200
 		except ConnectionError, e:
 			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503

@@ -10,13 +10,13 @@ wall = Blueprint('wall', __name__,
 @wall.route('/view', methods=['GET'])
 def view():
 	try:
-		return render_template('view.html')
+		return render_template('wall/view.html')
 	except TemplateNotFound:
 		abort(404)
 
 @wall.route('/post', methods=['GET'])
 def post():
 	try:
-		return render_template('post.html')
+		return render_template('wall/post.html')
 	except TemplateNotFound:
 		abort(404)
