@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% set title = 'Authorization required &middot; ' %}
+{% block css %}
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block body %}
+	<div id="auth-req">
+		<h1>Authorization <span>required</span></h1>
+	</div>
+{% endblock %}
+{% block scripts %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			setTimeout(function(){
+				var authReq = $('#auth-req');
+				var sorry = $('<p>Sorry!</p>');
+				authReq.append(sorry.hide().fadeIn('slow'));
+				setInterval(function(){
+					sorry.fadeToggle('slow');
+				}, 5000);
+			}, 5000);
+		});
+	</script>
+{% endblock %}

@@ -92,7 +92,9 @@ var utils = {
 					});
 				}
 				setTimeout(function(){
-					$('.warning').fadeOut('slow');
+					$('.warning').fadeOut('slow', function(){
+						$(this).remove();
+					});
 				}, 10000);
 				utils.waiting();
 			}
@@ -101,10 +103,14 @@ var utils = {
 					backgroundColor: '#FFF'
 				}, 5000);
 				if($('.warning').is(':visible')){
-					$('.warning').fadeOut('fast');
+					$('.warning').fadeOut('fast', function(){
+						$(this).remove();
+					});
 				}
 				if($('.error').is(':visible')){
-					$('.error').fadeOut('fast');
+					$('.error').fadeOut('fast', function(){
+						$(this).remove();
+					});
 				}
 				var initial = $('#initial');
 				if(initial.is(':visible')){

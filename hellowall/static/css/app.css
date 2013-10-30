@@ -38,6 +38,12 @@ textarea {
 	width:50%;
 	padding-top:70px;
 }
+#auth-req {
+	text-align:center;
+}
+	#auth-req h1 {
+		line-height:80px;
+	}
 #post-list ul {
 	margin-top:30px;
 }

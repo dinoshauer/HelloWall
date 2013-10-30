@@ -26,7 +26,6 @@ var utils = {
 			},
 			success: successCallback,
 			error: function(jqXHR, textStatus, errorThrown){
-				console.log(jqXHR);
 				utils.loader.fadeIn('slow', function(){
 					var error = $(utils.error(jqXHR.responseJSON.error));
 					if(!$('.error').is(':visible')){
@@ -52,16 +51,19 @@ var utils = {
 				}
 				setTimeout(function(){
 					$('.warning').fadeOut('slow', function(){
-						$('ul').html(utils.message(['No posts found.', null]));
+						$(this).remove();
+						$('ul').html($(utils.message(['No posts found.', null])).hide().fadeIn('slow'));
 					});
 				}, 10000);
 			}
 			else {
 				if($('.warning').is(':visible')){
 					$('.warning').fadeOut('fast');
+					$(this).remove();
 				}
 				if($('.error').is(':visible')){
 					$('.error').fadeOut('fast');
+					$(this).remove();
 				}
 				$('ul').fadeOut('slow', function(){
 					$(this).empty();
