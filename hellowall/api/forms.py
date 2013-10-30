@@ -14,7 +14,7 @@ class WallException(Exception):
 		return repr(self.value)
 
 class WallMessage:
-	def __init__(self, prefix='msg', timeout=timedelta(minutes=1)):
+	def __init__(self, prefix='msg', timeout=timedelta(minutes=60):
 		self.prefix = prefix
 		self.timeout = timeout
 		self.r = StrictRedis(__REDIS_HOST__, port=__REDIS_PORT__)
