@@ -43,3 +43,8 @@ def sticky():
 def get():
 	msg = WallMessage().read()
 	return jsonify(msg[0]), msg[1]
+
+@api.route('/read/simple', methods=['GET'])
+def getSimple():
+	msg = WallMessage().read(simple=True)
+	return jsonify(msg[0]), msg[1]

@@ -8,13 +8,21 @@ body, html {
 h1 {
 	font-weight:100;
 	font-size:100px;
-	line-height:80px;
-	vertical-align:middle;
-	display:table-cell;
+	line-height:0px;
+	letter-spacing: -2px;
 }
-	h1 span {
-		font-weight:800;
+	h1 span, h5 span {
+		font-weight:400;
 	}
+h5 {
+	font-weight:400;
+	font-size:25px;
+	line-height:0px;
+}
+#text-holder {
+	display:table-cell;
+	vertical-align:middle;
+}
 textarea {
     resize: none;
     margin-top:10px;

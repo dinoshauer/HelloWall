@@ -28,14 +28,17 @@ class WallMessage:
 		except Exception, e:
 			return {'result': False, 'error': str(e)}, 500
 
-	def read(self):
+	def read(self, simple=False):
 		try:
 			keys = self.r.keys(self.prefix + '*')
 			result = list()
 			for key in keys:
 				value = self.r.get(key)
 				if value not in result:
-					result.append((value, key))
+					if simple:
+						result.append(value)
+					else:
+						result.append((value, key))
 			return {'result': True if len(result) > 0 else False, 'data': result}, 200
 		except ConnectionError, e:
 			return {'result': False, 'error': 'Could not connect to redis, is the server started and accepting connections on %s:%s?' % (__REDIS_HOST__, __REDIS_PORT__)}, 503

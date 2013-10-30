@@ -14,13 +14,27 @@ var utils = {
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
 	message: function(message){
-		if(message[0].length > 50){
-			return '<div class="message w8"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'	
+		var isImage = utils.checkIfImage(message);
+		if(isImage === null){
+			if(message.length > 50){
+				return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'	
+			}
+			else if(message.length > 20 && message.length < 49){
+				return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'
+			}
+			return '<div class="message"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'
 		}
-		else if(message[0].length > 20 && message[0].length < 49){
-			return '<div class="message w8"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'
-		}
-		return '<div class="message"><p>' + message[0].replace(/\n/g, '<br />') + '</p></div>'
+		return isImage;
+	},
+	checkIfImage: function(message){
+		var extensions = ['.jpg', '.gif', '.png', '.svg'];
+		var image = null;
+		$.each(extensions, function(i, item){
+			if(message.indexOf(item) != -1){
+				image = '<img src="' + message+ '" />';
+			}
+		});
+		return image;
 	},
 	colors: [
 		//'#fbbf2f',
@@ -77,6 +91,9 @@ var utils = {
 						}
 					});
 				}
+				setTimeout(function(){
+					$('.warning').fadeOut('slow');
+				}, 10000);
 				utils.waiting();
 			}
 			else {
@@ -123,9 +140,9 @@ var utils = {
 		});
 	},
 	initial: function(interval){
-		utils.call('/api/read', 'GET', false);
+		utils.call('/api/read/simple', 'GET', false);
 		setInterval(function(){
-			utils.call('/api/read', 'GET', false);
+			utils.call('/api/read/simple', 'GET', false);
 		}, interval);
 		return null
 	},

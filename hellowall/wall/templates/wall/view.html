@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
 {% set title = '' %}
 {% block body %}
-	<div id="initial" class="hide">
-		<h1>Hello <span>Wall</span></h1>
+	<div id="initial">
+		<div id="text-holder">
+			<h1>Hello <span>Wall</span></h1>
+			<h5></h5>
+		</div>
 	</div>
 	<div id="message-container">
 	</div>
@@ -11,7 +14,8 @@
 	<script src="{{ url_for('wall.static', filename='script/wall/view.js') }}"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('#initial').hide();  // TODO: Have to hide first because #initial has display:table;
+			$('#initial #text-holder h5').html(window.location.host + '<span>/wall/post</span>');
+			$('#initial').hide(); 
 			$('#initial').fadeIn(3000, function(){
 				utils.initial(30000);
 			});
