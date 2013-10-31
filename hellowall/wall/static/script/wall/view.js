@@ -1,6 +1,5 @@
 var utils = {
 	msnry: new Masonry( document.getElementById('message-container'), {
-		// options
 		columnWidth: 150,
 		itemSelector: '.message',
 		containerStyle: null
@@ -31,9 +30,19 @@ var utils = {
 		var image = null;
 		$.each(extensions, function(i, item){
 			if(message.indexOf(item) != -1){
-				image = '<img src="' + message+ '" />';
+				image = '<div class="message"><img src="' + message+ '" /></div>';
 			}
 		});
+		return image;
+	},
+	resizeImage: function(image){
+		var img = new Image();
+		img.src = $('.message img').attr('src');
+		var w = img.width;
+		if(w > 350){
+			image.find('img').css('width', 300);
+		}
+		image.fadeIn('slow');
 		return image;
 	},
 	colors: [
@@ -116,8 +125,9 @@ var utils = {
 				if(initial.is(':visible')){
 					initial.fadeOut('slow', function(){
 						$.each(data.data, function(i, item){
-							var msg = $(utils.message(item)).css('color', utils.colorize());
+							var msg = $(utils.message(item)).css('color', utils.colorize()).hide();
 							$('#message-container').append(msg);
+							utils.resizeImage($(msg));
 							utils.msnry.appended(msg);
 						});
 						utils.messages = data.data;
@@ -126,8 +136,9 @@ var utils = {
 				else {
 					var newDiff = $(data.data).not(utils.messages).get();
 					$.each(newDiff, function(i, item){
-						var msg = $(utils.message(item)).css('color', utils.colorize());
+						var msg = $(utils.message(item)).css('color', utils.colorize()).hide();
 						$('#message-container').append(msg);
+						utils.resizeImage($(msg));
 						utils.msnry.appended(msg);
 						utils.messages.push(item);
 					});
