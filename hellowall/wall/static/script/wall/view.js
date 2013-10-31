@@ -40,7 +40,7 @@ var utils = {
 		img.src = $('.message img').attr('src');
 		var w = img.width;
 		if(w > 350){
-			image.find('img').css('width', 300);
+			image.find('img').css('width', '150%');
 		}
 		image.fadeIn('slow');
 		return image;

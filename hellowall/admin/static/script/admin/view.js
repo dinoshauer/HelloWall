@@ -101,10 +101,8 @@ var checkForBanner = 0;
 // Sticky posts
 $('ul').on('click', '.sticky', function(){
 	utils.call('/api/sticky', 'POST', false, $.param({ key: $(this).data('key-id') }), utils.processStatus);
-	$(this).parent().fadeOut('slow', function(){
-		$(this).remove();
-	})
-	utils.call('/api/read', 'GET', false, null, utils.process);
+	$(this).parent().fadeToggle('fast');
+	$(this).parent().fadeToggle('fast');
 	checkForBanner = setInterval(function(){
 						if($('.success').is(':visible')){
 							setTimeout(function(){
