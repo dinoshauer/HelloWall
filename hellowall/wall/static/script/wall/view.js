@@ -1,8 +1,8 @@
 var utils = {
-	msnry: new Masonry( document.getElementById('message-container'), {
+	pckry: new Packery( document.getElementById('message-container'), {
 		columnWidth: 150,
 		itemSelector: '.message',
-		containerStyle: null
+		//containerStyle: null
 	}),
 	messages: [],
 	loader: $('<div class="loader"><i class="fa fa-2x fa-refresh fa-spin"></i></div>'),
@@ -12,38 +12,46 @@ var utils = {
 	warning: function(message){
 		return '<div class="warning hide"><p>Oh snap!<br />' + message + '</p></div>'
 	},
-	message: function(message){
-		var isImage = utils.checkIfImage(message);
-		if(isImage === null){
-			if(message.length > 50){
-				return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'	
+	createMessage: function(message, callback){
+		utils.IsValidImageUrl(message, function (image, isImage) {
+			if (isImage) {
+				callback(utils.createImageTag(message));
+				return;
 			}
-			else if(message.length > 20 && message.length < 49){
-				return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'
-			}
-			return '<div class="message"><p>' + message.replace(/\n/g, '<br />') + '</p></div>'
-		}
-		return isImage;
-	},
-	checkIfImage: function(message){
-		var extensions = ['.jpg', '.gif', '.png', '.svg'];
-		var image = null;
-		$.each(extensions, function(i, item){
-			if(message.indexOf(item) != -1){
-				image = '<div class="message"><img src="' + message+ '" /></div>';
-			}
+
+			callback(utils.createMessageTag(message));
 		});
-		return image;
+	},
+	createMessageTag: function (message) {
+		if(message.length > 50){
+			return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>';
+		}
+		else if (message.length > 20 && message.length < 49) {
+			return '<div class="message w8"><p>' + message.replace(/\n/g, '<br />') + '</p></div>';
+		}
+		
+		return '<div class="message"><p>' + message.replace(/\n/g, '<br />') + '</p></div>';
+	},
+	createImageTag: function(message){
+		return '<div class="message"><img src="' + message+ '" /></div>';
+	},
+	IsValidImageUrl: function (url, callback) {
+	    $("<img>", {
+            src: url,
+            error: function() { callback(url, false); },
+            load: function() { callback(url, true); }
+        });
 	},
 	resizeImage: function(image){
-		var img = new Image();
-		img.src = $('.message img').attr('src');
-		var w = img.width;
-		if(w > 350){
-			image.find('img').css('width', '150%');
+		if (!$(image).find('img').length > 0) {
+			return;
 		}
-		image.fadeIn('slow');
-		return image;
+
+		var pic = $(image).find('img').get(0);
+		$(pic).parent().width(350);
+		$(pic).width(350);
+
+		$(image).fadeIn('slow');
 	},
 	colors: [
 		//'#fbbf2f',
@@ -125,22 +133,29 @@ var utils = {
 				if(initial.is(':visible')){
 					initial.fadeOut('slow', function(){
 						$.each(data.data, function(i, item){
-							var msg = $(utils.message(item)).css('color', utils.colorize()).hide();
-							$('#message-container').append(msg);
-							utils.resizeImage($(msg));
-							utils.msnry.appended(msg);
+							utils.createMessage(item, function (messageItem) {
+								var element = $(messageItem);
+								$('#message-container').append(element);
+								$(messageItem).css('color', utils.colorize()).hide();
+								utils.resizeImage(element);
+								utils.pckry.appended($(element).get(0));
+							});
 						});
+
 						utils.messages = data.data;
 					});
 				}
 				else {
 					var newDiff = $(data.data).not(utils.messages).get();
 					$.each(newDiff, function(i, item){
-						var msg = $(utils.message(item)).css('color', utils.colorize()).hide();
-						$('#message-container').append(msg);
-						utils.resizeImage($(msg));
-						utils.msnry.appended(msg);
-						utils.messages.push(item);
+						utils.createMessage(item, function (messageItem) {
+							var element = $(messageItem);
+							$('#message-container').append(element);
+							$(messageItem).css('color', utils.colorize()).hide();
+							utils.resizeImage(element);
+							utils.pckry.appended($(element).get(0));
+							utils.messages.push(item);
+						});
 					});
 					// Delete old messages
 					var oldDiff = $(utils.messages).not(data.data).get();
@@ -148,8 +163,8 @@ var utils = {
 						$.each(oldDiff, function(i, item){
 							var msg = $($('.message:contains("' + item + '")'));
 							msg.remove();
-							utils.msnry.remove(msg);
-							utils.msnry.layout();
+							utils.pckry.remove(msg);
+							utils.pckry.layout();
 						});
 					}
 				}
